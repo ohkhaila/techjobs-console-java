@@ -2,6 +2,7 @@ package org.launchcode.techjobs.console;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -11,7 +12,7 @@ public class TechJobs {
 
     private static Scanner in = new Scanner(System.in);
 
-    public static void main (String[] args) {
+    public static void main(String[] args) { // The main application runner
 
         // Initialize our field map with key/name pairs
         HashMap<String, String> columnChoices = new HashMap<>();
@@ -27,7 +28,7 @@ public class TechJobs {
         actionChoices.put("list", "List");
 
         System.out.println("Welcome to LaunchCode's TechJobs App!");
-
+        //The keys in actionChoices and columnChoices represent the “internal” String we’ll use to refer to these options (e.g. when representing the user’s menu choice, or querying data). The values in the map represent the “external” way that these are represented to the user.
         // Allow the user to search until they manually quit
         while (true) {
 
@@ -61,7 +62,7 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                   printJobs(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -70,11 +71,12 @@ public class TechJobs {
     }
 
     // ﻿Returns the key of the selected item from the choices Dictionary
+    //A utility method that displays a menu of choices and returns the user’s selection
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
 
         Integer choiceIdx;
         Boolean validChoice = false;
-        String[] choiceKeys = new String[choices.size()];
+        String[] choiceKeys = new String[choices.size()]; //choiceKeys is used to easily enumerate the choices HashMap. In other words, it gives us a simple way to provide an ordering to choices, which doesn’t have an ordering of its own
 
         // Put the choices in an ordered structure so we can
         // associate an integer with each one
@@ -103,7 +105,7 @@ public class TechJobs {
                 validChoice = true;
             }
 
-        } while(!validChoice);
+        } while (!validChoice);
 
         return choiceKeys[choiceIdx];
     }
@@ -111,6 +113,17 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+            if (someJobs.size() == 0) {
+                System.out.println("No results found at this time");
+            }else {
+                for (HashMap<String, String> job : someJobs) {
+                    System.out.println("*****");
+
+                    for (Map.Entry<String, String> property : job.entrySet()) {
+                        System.out.println(property.getKey() + ": " + property.getValue());
+                    }
+                    System.out.println("\n");
+                }
+            }
     }
 }
